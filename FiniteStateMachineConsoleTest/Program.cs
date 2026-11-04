@@ -97,7 +97,7 @@ if (stateMachine == null)
 
 Console.WriteLine($"\n--- Created {stateMachine.GetType().Name} ---\n");
 
-Common.StopableTimer.TimerCallback = _ =>
+Common.StoppableTimer.TimerCallback = _ =>
 {
   if (stateMachine.CurrentState is BaseTrafficLightState lightState)
     lightState.Tick();
@@ -154,6 +154,6 @@ Console.WriteLine($" < {DateTime.Now:mm:ss}");
 
 stateMachine.Dispose();
 
-Common.StopableTimer.Dispose();
+Common.StoppableTimer.Dispose();
 
 Console.WriteLine($"\n--- Requested stopping machine : {stopUpdateLoop}\n--- Played {loopAmount} loops ---\n");

@@ -1079,13 +1079,13 @@ internal abstract class BaseTrafficLightState : BaseState
     //Reset inner timer's count before starting the (shared) Timer.
     _tick = 0;
 
-    TimerExtensions.StopableTimer
+    TimerExtensions.StoppableTimer
         .StartTimer(TimeSpan.FromSeconds(_delay));
   }
 
   public override void OnExit(IState? nextState)
   {
-    TimerExtensions.StopableTimer.StopTimer();
+    TimerExtensions.StoppableTimer.StopTimer();
 
     Console.WriteLine($"\n--- [{DateTime.Now:mm:ss:ff}] Exiting <= {GetType().Name} ---\n");      
   }
@@ -1149,23 +1149,23 @@ public static class TimerExtensions : IDisposable
 {
   public static TimerCallback TimerCallback { get; set; }
 
-  private static Timer _stopableTimer;
-  public static Timer StopableTimer 
-    => _stopableTimer ??= new(
+  private static Timer _stoppableTimer;
+  public static Timer StoppableTimer 
+    => _stoppableTimer ??= new(
       TimerCallback,
       default,
       Timeout.Infinite,
       Timeout.Infinite);
 
   public static void StartTimer(this Timer timer, TimeSpan period)
-    => StopableTimer?.Change(TimeSpan.Zero, period);
+    => StoppableTimer?.Change(TimeSpan.Zero, period);
 
   public static void StopTimer(this Timer timer)
-    => StopableTimer?.Change(Timeout.Infinite, Timeout.Infinite);
-    
+    => StoppableTimer?.Change(Timeout.Infinite, Timeout.Infinite);
+
   public void Dispose()
   {
-    StopableTimer.Dispose();
+    StoppableTimer.Dispose();
     _timer = default;
     _timerCallback = default;
   }

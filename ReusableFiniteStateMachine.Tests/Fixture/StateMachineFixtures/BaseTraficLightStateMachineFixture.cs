@@ -108,26 +108,26 @@ public abstract class BaseTraficLightStateMachineFixture : StateMachine, IAsyncD
 
   /// <summary>
   /// Dispose bth this <see cref="BaseTraficLightStateMachineFixture"/> state machine object 
-  /// and <see cref="Common.StopableTimer"/>.
+  /// and <see cref="Common.StoppableTimer"/>.
   /// </summary>
   /// <returns>The <see cref="ValueTask"/> to await this disposal.</returns>
   public ValueTask DisposeAsync()
   {
     Dispose();
 
-    Common.StopableTimer.Dispose();
+    Common.StoppableTimer.Dispose();
 
     return ValueTask.CompletedTask;
   }
 
   /// <summary>
   /// Initialize both this <see cref="BaseTraficLightStateMachineFixture"/> state machine object
-  /// and <see cref="Common.StopableTimer"/>.<see cref="StopableTimer.TimerCallback"/> delegate callback.
+  /// and <see cref="Common.StoppableTimer"/>.<see cref="StoppableTimer.TimerCallback"/> delegate callback.
   /// </summary>
   /// <returns>The <see cref="Task"/> to await this initialization.</returns>
   public Task InitializeAsync()
   {
-    Common.StopableTimer.TimerCallback = _ =>
+    Common.StoppableTimer.TimerCallback = _ =>
     {
       if (CurrentState is BaseTrafficLightState lightState)
         lightState.Tick();

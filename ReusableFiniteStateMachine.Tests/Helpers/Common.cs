@@ -82,8 +82,8 @@ namespace ReusableFiniteStateMachine.Tests.Helpers;
 /// </summary>
 public static class Common
 {
-  public static StopableTimer StopableTimer
-    => field ??= new StopableTimer();
+  public static StoppableTimer StoppableTimer
+    => field ??= new StoppableTimer();
 
   public static StringBuilder TestsLog => field ??= new();
 

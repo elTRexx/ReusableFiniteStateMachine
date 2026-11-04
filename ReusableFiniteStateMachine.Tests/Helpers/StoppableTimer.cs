@@ -78,7 +78,7 @@ namespace ReusableFiniteStateMachine.Tests.Helpers;
 /// <summary>
 /// Utility class that wraps a <see cref="ITimer"/> timer object to ease its manipulation.
 /// </summary>
-public class StopableTimer : IDisposable
+public class StoppableTimer : IDisposable
 {
   private TimerCallback? _timerCallback;
   public TimerCallback TimerCallback 

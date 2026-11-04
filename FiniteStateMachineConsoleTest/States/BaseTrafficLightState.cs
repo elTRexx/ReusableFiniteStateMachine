@@ -87,7 +87,7 @@ namespace FiniteStateMachineConsoleTest.States
 
     /// <summary>
     /// Simple internal method to increase the count of how many time 
-    /// the <see cref="Common.StopableTimer"/> have ticked when this <see cref="IState"/>
+    /// the <see cref="Common.StoppableTimer"/> have ticked when this <see cref="IState"/>
     /// is the current active state of its <see cref="IStateMachine"/> state machine owner.
     /// </summary>
     internal void Tick() => _tick++;
@@ -112,17 +112,17 @@ namespace FiniteStateMachineConsoleTest.States
       ///Reset inner timer's count before starting the (shared) Timer.
       _tick = 0;
 
-      Common.StopableTimer.Start(TimeSpan.FromSeconds(_delay));
+      Common.StoppableTimer.Start(TimeSpan.FromSeconds(_delay));
     }
 
     /// <summary>
     /// <inheritdoc cref="BaseState.OnExit(IState?)"/>
-    /// Exiting this <see cref="BaseTrafficLightState"/> stop <see cref="Common.StopableTimer"/>.
+    /// Exiting this <see cref="BaseTrafficLightState"/> stop <see cref="Common.StoppableTimer"/>.
     /// </summary>
     /// <param name="nextState">Not used here.</param>
     public override void OnExit(IState? nextState)
     {
-      Common.StopableTimer.Stop();
+      Common.StoppableTimer.Stop();
       
       Console.WriteLine($"\n--- [{DateTime.Now:mm:ss:ff}] Exiting <= {GetType().Name} ---\n");      
     }

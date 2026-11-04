@@ -102,7 +102,7 @@ internal abstract class BaseTrafficLightState : BaseState
   /// <summary>
   /// <inheritdoc cref="BaseState.OnEnter(IState?)"/>
   /// Assure to reset its <see cref="_tick"/> field to 0
-  /// and start <see cref="StopableTimer"/>.
+  /// and start <see cref="StoppableTimer"/>.
   /// </summary>
   /// <param name="previousState">Not used here.</param>
   public override void OnEnter(IState? previousState)
@@ -110,15 +110,15 @@ internal abstract class BaseTrafficLightState : BaseState
     ///Reset inner timer's count before starting the (shared) Timer.
     _tick = 0;
 
-    StopableTimer.Start(TimeSpan.FromSeconds(2));
+    StoppableTimer.Start(TimeSpan.FromSeconds(2));
   }
 
   /// <summary>
-  /// Exiting this <see cref="BaseTrafficLightState"/> stop <see cref="StopableTimer"/>.
+  /// Exiting this <see cref="BaseTrafficLightState"/> stop <see cref="StoppableTimer"/>.
   /// </summary>
   /// <param name="nextState">Not used here.</param>
   public override void OnExit(IState? nextState)
-    => StopableTimer.Stop();
+    => StoppableTimer.Stop();
 
   /// <summary>
   /// <inheritdoc cref="BaseState.Update(object?)"/>
