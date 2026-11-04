@@ -1079,12 +1079,13 @@ internal abstract class BaseTrafficLightState : BaseState
     //Reset inner timer's count before starting the (shared) Timer.
     _tick = 0;
 
-    TimerExtensions.LightTimer.StartTimer(TimeSpan.FromSeconds(_delay));
+    TimerExtensions.StopableTimer
+        .StartTimer(TimeSpan.FromSeconds(_delay));
   }
 
   public override void OnExit(IState? nextState)
   {
-    TimerExtensions.LightTimer.StopTimer();
+    TimerExtensions.StopableTimer.StopTimer();
 
     Console.WriteLine($"\n--- [{DateTime.Now:mm:ss:ff}] Exiting <= {GetType().Name} ---\n");      
   }
@@ -1144,23 +1145,30 @@ internal class RedState : BaseTrafficLightState
 The static extension class used to ease the use of a `System.Threading.Timer` :
 
 ```csharp
-public static class TimerExtensions
+public static class TimerExtensions : IDisposable
 {
-  public static TimerCallback LightCallback { get; set; }
+  public static TimerCallback TimerCallback { get; set; }
 
-  private static Timer _lightTimer;
-  public static Timer LightTimer 
-    => _lightTimer ??= new(
-      LightCallback,
+  private static Timer _stopableTimer;
+  public static Timer StopableTimer 
+    => _stopableTimer ??= new(
+      TimerCallback,
       default,
       Timeout.Infinite,
       Timeout.Infinite);
 
   public static void StartTimer(this Timer timer, TimeSpan period)
-    => timer?.Change(TimeSpan.Zero, period);
+    => StopableTimer?.Change(TimeSpan.Zero, period);
 
   public static void StopTimer(this Timer timer)
-    => timer?.Change(Timeout.Infinite, Timeout.Infinite);
+    => StopableTimer?.Change(Timeout.Infinite, Timeout.Infinite);
+    
+  public void Dispose()
+  {
+    StopableTimer.Dispose();
+    _timer = default;
+    _timerCallback = default;
+  }
 }
 ```
 
@@ -1184,7 +1192,7 @@ if (stateMachine == null)
 
 Console.WriteLine($"\n--- Created {stateMachine.GetType().Name} ---\n");
 
-TimerExtensions.LightCallback = _ =>
+TimerExtensions.TimerCallback = _ =>
 {
   if (stateMachine.CurrentState is BaseTrafficLightState lightState)
     lightState.Tick();
@@ -1216,7 +1224,11 @@ stateMachine.InitializeStateMachine(firstState, true);
 
 //Asynchronously run a task that will stop the running state machine after 50 seconds preventing a potential infinite updating loop.
 Task.Run(
-  async () => { await Task.Delay(50_000); stateMachine.ForceStopStateMachine(); }
+  async () => 
+    { 
+      await Task.Delay(50_000); 
+      stateMachine.ForceStopStateMachine(); 
+    }
   );
 
 Console.WriteLine($"\n--- Requested stopping machine : {stopUpdateLoop}\n--- Played {loopAmount} loops ---\n");
