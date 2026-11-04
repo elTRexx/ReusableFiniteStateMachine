@@ -562,14 +562,14 @@ flowchart TB
 
     subgraph CurrentStateSetter["CurrentState setter"]
     SetterStart@{ shape: circle, label: "Start" } --> ChangeCurrentState
-    CurrentStateExit["CurrentState.OnExit()"] --> UpdateCurrentState["CurrentState = new Value"]
+    CurrentStateExit["CurrentState.OnExit()"] --> UpdateCurrentState["CurrentState = newValue"]
     UpdateCurrentState --> NextStateEnter["newValue.OnEnter()"]
     NextStateEnter --> NextIsEnd    
     end
 
-    CreateFSM --> CreateState["Create State"]    
-    CreateState-- firstState --> Init["Initialize FSM"]
-    CreateState-- firstState --> InitState["firstState.Init()"]
+    CreateFSM --> CreateState["Create State"]
+    CreateState-- firstState --> InitState["firstState.Init()"]    
+    InitState-- firstState --> Init["Initialize FSM"]    
     Init --> AutorunFSM["Autorun FSM"]  
     Init -. raise .-> MachineStarted(["`**_MachineStarted_**`"]):::eventClass  
     ResetFSM -- "`**No**`" --> Dispose
