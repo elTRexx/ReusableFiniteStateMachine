@@ -586,7 +586,7 @@ flowchart TB
     NextStateCentralized -- nextState --> CurrentStateSetter
     NextStateDecentralized -- nextState --> CurrentStateSetter   
     NextIsEnd --> CurrentStateUpdate    
-    
+
     ChangeCurrentState -- "`**Yes**`" --> CurrentStateUpdate["CurrentState.Update()"]
     ChangeCurrentState -- "`**No**`" --> CurrentStateExit  
     end    
