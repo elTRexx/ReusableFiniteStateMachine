@@ -1,0 +1,162 @@
+﻿#region CeCill-B license
+#region English version
+//Copyright Aurélien Pascal Maignan, (25 October 2026) 
+
+//[aurelien.maignan@protonmail.com]
+
+//This software is a computer program whose purpose is
+//to test the reusable state machine software library named "ReusableFiniteStateMachine"
+//using TUnit testing framework by Tom Longhurst (https://github.com/thomhurst/TUnit)
+
+//This software is governed by the CeCILL-B license under French law and
+//abiding by the rules of distribution of free software.  You can  use,
+//modify and/ or redistribute the software under the terms of the CeCILL-B
+//license as circulated by CEA, CNRS and INRIA at the following URL
+//"http://www.cecill.info". 
+
+//As a counterpart to the access to the source code and  rights to copy,
+//modify and redistribute granted by the license, users are provided only
+//with a limited warranty  and the software's author,  the holder of the
+//economic rights, and the successive licensors  have only  limited
+//liability. 
+
+//In this respect, the user's attention is drawn to the risks associated
+//with loading,  using,  modifying and/or developing or reproducing the
+//software by the user in light of its specific status of free software,
+//that may mean  that it is complicated to manipulate, and  that  also
+//therefore means  that it is reserved for developers  and  experienced
+//professionals having in-depth computer knowledge. Users are therefore
+//encouraged to load and test the software's suitability as regards their
+//requirements in conditions enabling the security of their systems and/or 
+//data to be ensured and, more generally, to use and operate it in the 
+//same conditions as regards security. 
+
+//The fact that you are presently reading this means that you have had
+//knowledge of the CeCILL-B license and that you accept its terms.
+#endregion
+
+#region French version
+//Copyright Aurélien Pascal Maignan, (25 Octobre 2026) 
+
+//aurelien.maignan@protonmail.com
+
+//Ce logiciel est un programme informatique servant à tester
+//la bibliothèque de machine à états réutilisable dénomé "ReusableFiniteStateMachine"
+//en utilisant le cadriciel TUnit développé par Tom Longhurst (https://github.com/thomhurst/TUnit)
+
+//Ce logiciel est régi par la licence CeCILL-B soumise au droit français et
+//respectant les principes de diffusion des logiciels libres.Vous pouvez
+//utiliser, modifier et/ou redistribuer ce programme sous les conditions
+//de la licence CeCILL-B telle que diffusée par le CEA, le CNRS et l'INRIA 
+//sur le site "http://www.cecill.info".
+
+//En contrepartie de l'accessibilité au code source et des droits de copie,
+//de modification et de redistribution accordés par cette licence, il n'est
+//offert aux utilisateurs qu'une garantie limitée.  Pour les mêmes raisons,
+//seule une responsabilité restreinte pèse sur l'auteur du programme,  le
+//titulaire des droits patrimoniaux et les concédants successifs.
+
+//A cet égard  l'attention de l'utilisateur est attirée sur les risques
+//associés au chargement, à l'utilisation,  à la modification et/ou au
+//développement et à la reproduction du logiciel par l'utilisateur étant 
+//donné sa spécificité de logiciel libre, qui peut le rendre complexe à
+//manipuler et qui le réserve donc à des développeurs et des professionnels
+//avertis possédant  des  connaissances  informatiques approfondies.Les
+//utilisateurs sont donc invités à charger  et  tester  l'adéquation  du
+//logiciel à leurs besoins dans des conditions permettant d'assurer la
+//sécurité de leurs systèmes et ou de leurs données et, plus généralement,
+//à l'utiliser et l'exploiter dans les mêmes conditions de sécurité.
+
+//Le fait que vous puissiez accéder à cet en-tête signifie que vous avez
+//pris connaissance de la licence CeCILL-B, et que vous en avez accepté les
+//termes. 
+#endregion 
+#endregion
+
+using ReusableFiniteStateMachine.Sources.States;
+using ReusableFiniteStateMachine.Sources.States.Interfaces;
+using TestingReusableFiniteStateMachinePackage.Sources.FiniteStateMachine;
+
+namespace TestingReusableFiniteStateMachinePackage.Sources.States;
+
+/// <summary>
+/// Abstract base class of any state of a simulated player 
+/// drived by its corresponding <see cref="FiniteStateMachine.PlayerStateMachine"/> state machine owner.
+/// </summary>
+internal abstract class BasePlayerState : BaseState
+{
+  public PlayerStateMachine? PlayerStateMachine => field ??= StateMachineOwner as PlayerStateMachine;
+
+  /// <summary>
+  /// <inheritdoc cref="IState.GetNextState(object?)"/>
+  /// Compute the next logical <see cref="IState"/> from any of <see cref="BasePlayerState"/>
+  /// based on <see cref="CurrentInput"/> value.
+  /// </summary>
+  /// <param name="argument">Not used here.</param>
+  /// <returns>The computed next logical <see cref="IState"/> to transition into from this <see cref="BasePlayerState"/> state.</returns>
+  public override IState? GetNextState(object? argument = null)
+  {
+    return CurrentInput switch
+    {
+      PlayerInputs.Jump => PlayerStateMachine?.Jump,
+      PlayerInputs.Exit => PlayerStateMachine?.Exit,
+      _ when !IsOnTheGround => PlayerStateMachine?.Jump,
+      _ when HP <= 0 => PlayerStateMachine?.Exit,
+      PlayerInputs.None => PlayerStateMachine?.Idle,
+      PlayerInputs.Up => PlayerStateMachine?.Move,
+      PlayerInputs.Down => PlayerStateMachine?.Move,
+      PlayerInputs.Left => PlayerStateMachine?.Move,
+      PlayerInputs.Right => PlayerStateMachine?.Move,
+      _ => default
+      #region _
+      //PlayerInputs.None when IsOnTheGround => PlayerStateMachine?.Idle,
+      //PlayerInputs.None when !IsOnTheGround => PlayerStateMachine?.Jump,
+      //PlayerInputs.Up when IsOnTheGround => PlayerStateMachine?.Move,
+      //PlayerInputs.Up when !IsOnTheGround => PlayerStateMachine?.Jump,
+      //PlayerInputs.Down when IsOnTheGround => PlayerStateMachine?.Move,
+      //PlayerInputs.Down when !IsOnTheGround => PlayerStateMachine?.Jump,
+      //PlayerInputs.Left when IsOnTheGround => PlayerStateMachine?.Move,
+      //PlayerInputs.Left when !IsOnTheGround => PlayerStateMachine?.Jump,
+      //PlayerInputs.Right when IsOnTheGround => PlayerStateMachine?.Move,
+      //PlayerInputs.Right when !IsOnTheGround => PlayerStateMachine?.Jump,
+      //PlayerInputs.Jump => PlayerStateMachine?.Jump,
+      //PlayerInputs.Exit => PlayerStateMachine?.Exit,
+      //_ => default 
+      #endregion
+    };
+  }
+
+  /// <summary>
+  /// <inheritdoc cref="IState.OnEnter(IState?)"/>
+  /// Update <see cref="Console"/> display whenever a <see cref="BasePlayerState"/> is entering.
+  /// </summary>
+  /// <param name="previousState">Not used here.</param>
+  public override void OnEnter(IState? previousState)
+  {
+    UpdateDisplay();
+  }
+
+  /// <summary>
+  /// <inheritdoc cref="IState.OnExit(IState?)"/>
+  /// No update logic performed here.
+  /// </summary>
+  /// <param name="nextState">Not used here.</param>
+  public override void OnExit(IState? nextState)
+  { }
+
+  /// <summary>
+  /// <inheritdoc cref="IState.Update(object?)"/>
+  /// No update logic performed here.
+  /// </summary>
+  /// <param name="argument">Not used here.</param>
+  public override void Update(object? argument = null)
+  { }
+
+  /// <summary>
+  /// <inheritdoc cref="BaseState.Init(object?)"/>
+  /// No initialization logic performed here.
+  /// </summary>
+  /// <param name="argument">Not used here.</param>
+  protected override void Init(object? argument = null)
+  { }
+}

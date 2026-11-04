@@ -1,0 +1,58 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Title>Reusable Finite State Machine</Title>
+    <Version>0.1.4</Version>
+    <Authors>Aurélien Pascal Maignan</Authors>
+    <PackageReadmeFile>Readme.md</PackageReadmeFile>
+    <PackageReleaseNotes>Updated Readme.md.</PackageReleaseNotes>
+    <PackageLicenseExpression>CECILL-C</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageTags>dotnet; FSM; reusable</PackageTags>
+    <PackageId>$(AssemblyName).$(Configuration)</PackageId>
+    <PackageIcon>icons\icon.png</PackageIcon>
+    <Description>This library offer a reusable finite state machine (FSM) to use for your own project with factories and caching mechanism for creating of your own FSM and their owned states. Those FSM offer both centralized and/or decentralized state transition logic implementation, auto-running them until reaching built-in end state or explitly stoping them and expose 4 event driven life cycle (starting, state changing, transition failing and ending) to hook into.</Description>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <InternalsVisibleTo Include="$(AssemblyName).Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="DEPRECATED\**" />
+    <Compile Remove="Embedded package files\**" />
+    <EmbeddedResource Remove="DEPRECATED\**" />
+    <EmbeddedResource Remove="Embedded package files\**" />
+    <None Remove="DEPRECATED\**" />
+    <None Remove="Embedded package files\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Embedded package files\rfsm_icon.png">
+      <Pack>true</Pack>
+      <Visible>false</Visible>
+      <PackagePath>icons\icon.png</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Embedded package files\Readme.md">
+      <Pack>true</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.14" />
+  </ItemGroup>
+  
+</Project>
