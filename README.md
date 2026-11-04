@@ -585,7 +585,7 @@ flowchart TB
     subgraph CurrentStateSetter["CurrentState setter"]
     SetterStart@{ shape: circle, label: "Start" } --> ChangeCurrentState
     NextIsEnd -- "`**No**`" --> CurrentStateUpdate
-    CurrentStateExit --> NextStateEnter["nextState.OnEnter()"]
+    CurrentStateExit --> NextStateEnter["newValue.OnEnter()"]
     NextStateEnter --> NextIsEnd
     ChangeCurrentState -- "`**Yes**`" --> CurrentStateUpdate["CurrentState.Update()"]
     ChangeCurrentState -- "`**No**`" --> CurrentStateExit["CurrentState.OnExit()"]    
@@ -607,9 +607,13 @@ This library live in those different namspaces :
 
 - `ReusableFiniteStateMachine.Sources.StateMachine[.Interfaces]` for everything related to `IStateMachine` and `StateMachine`
 
-- `ReusableFiniteStateMachine.Sources.Factories[.Interfaces]` for the use this library factories and their implementations
+- `ReusableFiniteStateMachine.Sources.Factories[.Interfaces]` to use this library factories and their implementations
 
-- `ReusableFiniteStateMachine.Sources.Utilities` when dealing with this library `Services`, `SharedStringBuilder` and `StateChangedEventArgs`
+- `ReusableFiniteStateMachine.Sources.Utilities` when dealing with this library  `StateChangedEventArgs`
+
+- `ReusableFiniteStateMachine.Sources.Services` for configuring, building and accessing usefull services from .Net built-in Dependency Injection framework *(`Microsoft.Extensions.Hosting`)*. Built-in ones are enough to have a working FSM implementation.
+
+- `ReusableFiniteStateMachine.Sources.Cache[.Interface]` to use this library cache implementation *(internally as it is an hidden layer used by exposed `IStateFactory` factory)*.
 
 ---
 
