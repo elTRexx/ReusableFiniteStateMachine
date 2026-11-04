@@ -7,10 +7,10 @@
     <LangVersion>latest</LangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Title>Reusable Finite State Machine</Title>
-    <Version>0.1.4</Version>
+    <Version>0.1.5</Version>
     <Authors>Aurélien Pascal Maignan</Authors>
     <PackageReadmeFile>Readme.md</PackageReadmeFile>
-    <PackageReleaseNotes>Updated Readme.md.</PackageReleaseNotes>
+    <PackageReleaseNotes>Updated and fixed Readme.md.</PackageReleaseNotes>
     <PackageLicenseExpression>CECILL-C</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageTags>dotnet; FSM; reusable</PackageTags>

@@ -6,6 +6,10 @@
 
 ---
 
+This library is both hosted as a [nuget package](https://www.nuget.org/packages/ReusableFiniteStateMachine.Release) and as [open source](https://github.com/elTRexx/ReusableFiniteStateMachine).
+
+---
+
 ### Context
 
 #### Origin :
