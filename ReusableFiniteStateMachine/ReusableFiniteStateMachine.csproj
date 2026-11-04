@@ -7,16 +7,17 @@
     <LangVersion>latest</LangVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Title>Reusable Finite State Machine</Title>
-    <Version>0.1.5</Version>
+    <Version>0.1.6</Version>
     <Authors>Aurélien Pascal Maignan</Authors>
     <PackageReadmeFile>Readme.md</PackageReadmeFile>
-    <PackageReleaseNotes>Updated and fixed Readme.md.</PackageReleaseNotes>
+    <PackageReleaseNotes>Updated Readme.md with link to this nuget package on nuget.org and the corresponding github repo urls.</PackageReleaseNotes>
     <PackageLicenseExpression>CECILL-C</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageTags>dotnet; FSM; reusable</PackageTags>
     <PackageId>$(AssemblyName).$(Configuration)</PackageId>
     <PackageIcon>icons\icon.png</PackageIcon>
     <Description>This library offer a reusable finite state machine (FSM) to use for your own project with factories and caching mechanism for creating of your own FSM and their owned states. Those FSM offer both centralized and/or decentralized state transition logic implementation, auto-running them until reaching built-in end state or explitly stoping them and expose 4 event driven life cycle (starting, state changing, transition failing and ending) to hook into.</Description>
+    <RepositoryUrl>https://github.com/elTRexx/ReusableFiniteStateMachine</RepositoryUrl>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
