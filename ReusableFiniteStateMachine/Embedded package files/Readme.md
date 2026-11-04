@@ -83,23 +83,23 @@ This library is articulated around 5 main parts :
 
 ```mermaid
 classDiagram
-    class IStateFactory <<Interface>>
-    IStateFactory <|.. StateFactory
-    class IStateMachineFactory <<Interface>>
-    IStateMachineFactory <|.. StateMachineFactory
-    class IStateMachine["IStateMachine : IDisposable"] <<Interface>>
-    IStateMachine "1".."1" EndState
-    IStateMachine "1".."1" StartState
-    IStateMachine <|.. StateMachine
-    IStateMachine *.. "0..1" IState : "CurrentState"
-    class IState["IState : IDisposable"] <<Interface>>
-    IState o.. "1" IStateMachine : "StateMachineOwner"
-    class BaseState <<Abstract>>
-    IState <|.. BaseState
-    BaseState <|-- EndState
-    BaseState <|-- StartState
-    class IStateCache <<Interface>>
-    IStateCache o.. "*" IState : "CachedStateInstances"
+    class IStateFactory <<Interface>>    
+    IStateFactory <|.. StateFactory    
+    class IStateMachineFactory <<Interface>>    
+    IStateMachineFactory <|.. StateMachineFactory    
+    class IStateMachine["IStateMachine : IDisposable"] <<Interface>>    
+    IStateMachine "1".."1" EndState    
+    IStateMachine "1".."1" StartState    
+    IStateMachine <|.. StateMachine    
+    IStateMachine *.. "0..1" IState : "CurrentState"    
+    class IState["IState : IDisposable"] <<Interface>>    
+    IState o.. "1" IStateMachine : "StateMachineOwner"    
+    class BaseState <<Abstract>>    
+    IState <|.. BaseState    
+    BaseState <|-- EndState    
+    BaseState <|-- StartState    
+    class IStateCache <<Interface>>    
+    IStateCache o.. "*" IState : "CachedStateInstances"    
     IStateCache <|.. StateCache
 ```
 
@@ -109,45 +109,45 @@ classDiagram
 
 ```mermaid
 classDiagram
-    class IStateMachine["IStateMachine : IDisposable"] <<Interface>> {             
-        +StartState StartState        
-        +EndState EndState        
-        +IState CurrentState        
-        +bool IsEnded        
-        +CancellationTokenSource CancellationTokenSource        
-        +event MachineStarted        
-        +event MachineEnded        
-        +event TransitionFailed        
-        +event CurrentStateChanged        
-        +Func~object, IState~ GetNextStateCentralized                                     
-        +InitializeStateMachine(firstState : IState, autorun : bool = false, argument : object = default)        
-        +AutorunStateMachine(argument : object = default)        
-        +GetNextState(argument : object = default) IState               
-        +Update(argument : object = default)        
-        +ForceStopStateMachine()        
-        +ResetStateMachine(resetCurrentState : bool = true)
-        +GetOrAddState~T_State~(argument : object = default) T_State 
-        +RaiseStateMachineStarted(eventArgs : EventArgs = default)        
-        +RaiseStateMachineEnded(eventArgs : EventArgs = default)  
-        +FlushMachineStarted()        
-        +FlushMachineEnded()        
-        +FlushTransitionFailed()        
-        +FlushCurrentStateChanged()        
-        +FlushMachineEvents()  
-    }    
-    class StateMachine {   
-        #bool _disposed     
-        +Dispose()        
-        ~#Dispose(disposing : bool)
-        #OnMachineStarted(eventArgs : EventArgs)        
-        #OnMachineEnded(eventArgs : EventArgs)        
-        #OnTransitionFailed(eventArgs : EventArgs)        
-        #OnCurrentStateChanged(stateChangedEventArgs : StateChangedEventArgs)
-        -_Reset(resetCurrentState : bool = true)
-        -_CleanStateMachine()
-        -_CancelUpdateLoop(sender : object, eventArgs : EventArgs)        
-        -_RefreshCancellationTokenSource()                
-    }    
+    class IStateMachine["IStateMachine : IDisposable"] <<Interface>> {                     
+        +StartState StartState                
+        +EndState EndState                
+        +IState CurrentState                
+        +bool IsEnded                
+        +CancellationTokenSource CancellationTokenSource                
+        +event MachineStarted                
+        +event MachineEnded                
+        +event TransitionFailed                
+        +event CurrentStateChanged                
+        +Func~object, IState~ GetNextStateCentralized                                             
+        +InitializeStateMachine(firstState : IState, autorun : bool = false, argument : object = default)                
+        +AutorunStateMachine(argument : object = default)                
+        +GetNextState(argument : object = default) IState                       
+        +Update(argument : object = default)                
+        +ForceStopStateMachine()                
+        +ResetStateMachine(resetCurrentState : bool = true)        
+        +GetOrAddState~T_State~(argument : object = default) T_State         
+        +RaiseStateMachineStarted(eventArgs : EventArgs = default)                
+        +RaiseStateMachineEnded(eventArgs : EventArgs = default)          
+        +FlushMachineStarted()                
+        +FlushMachineEnded()                
+        +FlushTransitionFailed()                
+        +FlushCurrentStateChanged()                
+        +FlushMachineEvents()      
+        }        
+    class StateMachine {           
+        #bool _disposed             
+        +Dispose()                
+        ~#Dispose(disposing : bool)        
+        #OnMachineStarted(eventArgs : EventArgs)                
+        #OnMachineEnded(eventArgs : EventArgs)                
+        #OnTransitionFailed(eventArgs : EventArgs)                
+        #OnCurrentStateChanged(stateChangedEventArgs : StateChangedEventArgs)        
+        -_Reset(resetCurrentState : bool = true)        
+        -_CleanStateMachine()        
+        -_CancelUpdateLoop(sender : object, eventArgs : EventArgs)                
+        -_RefreshCancellationTokenSource()                    
+    }        
     IStateMachine <|.. StateMachine
 ```
 
@@ -339,27 +339,27 @@ So setting it to the same value doesn't raise this event.
 
 ```mermaid
 classDiagram
-    class IState["IState : IDisposable"] <<Interface>> {
-        +IStateMachine StateMachineOwner
-        ~Initialize(stateMachine : IStateMachine, argument : object = default)
-        +OnEnter(previousState : IState)
-        +OnExit(nextState : IState)
-        +GetNextState(argument : object = default) IState
-        +Update(argument : object = default)
-        ~ClearOwner()
-    }
-    class BaseState <<Abstract>> {
-        #bool _disposed
-        +Dispose()
-        ~#Dispose(disposing : bool)
-        ~#Init(argument : object = default)*
-    }
-    class StartState {
-        -IState _firstState
-    }
-    class EndState 
-    IState <|.. BaseState
-    BaseState <|-- StartState
+    class IState["IState : IDisposable"] <<Interface>> {        
+        +IStateMachine StateMachineOwner        
+        ~Initialize(stateMachine : IStateMachine, argument : object = default)        
+        +OnEnter(previousState : IState)        
+        +OnExit(nextState : IState)        
+        +GetNextState(argument : object = default) IState        
+        +Update(argument : object = default)        
+        ~ClearOwner()    
+        }    
+    class BaseState <<Abstract>> {        
+        #bool _disposed        
+        +Dispose()        
+        ~#Dispose(disposing : bool)        
+        ~#Init(argument : object = default)*    
+        }    
+    class StartState {        
+        -IState _firstState    
+        }    
+    class EndState     
+    IState <|.. BaseState    
+    BaseState <|-- StartState    
     BaseState <|-- EndState
 ```
 
@@ -409,10 +409,10 @@ The default implementation is calling `IStateFactory.CleanCache(IState)` method 
 
 ```mermaid
 classDiagram
-    class IStateMachineFactory <<Interface>> {
-        +CreateStateMachine() IStateMachine
-        +CreateStateMachint~T_StateMachine~() : T_StateMachine 
-    }
+    class IStateMachineFactory <<Interface>> {                
+        +CreateStateMachine() IStateMachine            
+        +CreateStateMachint~T_StateMachine~() : T_StateMachine     
+        }    
     IStateMachineFactory <|.. StateMachineFactory
 ```
 
@@ -424,9 +424,9 @@ This factory class simply return a new `StateMachine` instance, or any given oth
 
 ```mermaid
 classDiagram
-    class IStateFactory <<Interface>> {        
-        +GetOrCreateState~T_State~(stateMachine : IStateMachine, argument : object = default) T_State        
-    }
+    class IStateFactory <<Interface>> {                
+        +GetOrCreateState~T_State~(stateMachine : IStateMachine, argument : object = default) T_State            
+    }    
     IStateFactory <|.. StateFactory
 ```
 
@@ -437,7 +437,7 @@ This factory is a little more elaborate with its exposed
 
 2. Initialize it with its `IStateMachine` that will own it and any potential argument needed.
 
-3. Will cache this new `IState` instance in `IStateCache.CachedStateInstances`  `Dictionary` cache keyed by its `IStateMachine` owner and return it.
+3. Will cache this new `IState` instance in `IStateCache.CachedStateInstances` `Dictionary` cache keyed by its `IStateMachine` owner and return it.
 
 4. Bypass all above step if the given generic type is already cached under given `IStateMachine` argument and return this cached instance instead.
 
@@ -478,14 +478,14 @@ As a consequence, each FSM could own only one object per concrete `IState` imple
 classDiagram
     class Builder {
         +Services Services$        
-        +BuildHost(builder : HostApplicationBuilder, overrideCacheServices : Func<IServiceCollection, IServiceCollection> = null, overrideFactoryServices : Func<IServiceCollection, IServiceCollection> = null, overrideLocatorServices : Func<IServiceCollection, IServiceCollection> = null) IHost$
-        +BuildHost(args : string[]?, overrideCacheServices : Func<IServiceCollection,IServiceCollection> = null, overrideFactoryServices : Func<IServiceCollection,IServiceCollection> = null, overrideLocatorServices : Func<IServiceCollection, IServiceCollection> = null) IHost$
-    }
+        +BuildHost(builder : HostApplicationBuilder, overrideCacheServices : Func = null, overrideFactoryServices : Func = null, overrideLocatorServices : Func = null) IHost$        
+        +BuildHost(args : string[]?, overrideCacheServices : Func = null, overrideFactoryServices : Func = null, overrideLocatorServices : Func = null) IHost$    
+        }
 ```
 
 This static class offer a static access to a `Services` service locator instance object.
 
-But its main purpose is to build a configured `HostApplicationBuilder`  and return that built `IHost` instance object.
+But its main purpose is to build a configured `HostApplicationBuilder` and return that built `IHost` instance object.
 
 For this it expose 2 overloads of a `BuildHost()` method :
 
@@ -500,16 +500,16 @@ For this it expose 2 overloads of a `BuildHost()` method :
 ```mermaid
 classDiagram
     class Configuration {
-        +ConfigBuilder(builder: HostApplicationBuilder, overrideCacheServices : Func<IServiceCollection, IServiceCollection>? = null, overrideFactoryServices : Func<IServiceCollection, IServiceCollection>? = null, overrideLocatorServices : Func<IServiceCollection, IServiceCollection>? = null) HostApplicationBuilder$
-        ~AddServices(builder : IHostApplicationBuilder, overrideCacheServices : Func<IServiceCollection, IServiceCollection>? = null, overrideFactoryServices : Func<IServiceCollection, IServiceCollection>? = null, overrideLocatorServices : Func<IServiceCollection, IServiceCollection>? = null) IServiceCollection$
-        ~AddServices(services : IServiceCollection, overrideCacheServices : Func<IServiceCollection, IServiceCollection>? = null, overrideFactoryServices : Func<IServiceCollection, IServiceCollection>? = null, overrideLocatorServices : Func<IServiceCollection, IServiceCollection>? = null) IServiceCollection$
-        ~AddCacheServices(services : IServiceCollection) IserviceCollection$
-        ~AddFactoryServices(services : IServiceCollection) IserviceCollection$
-        ~AddLocatorServices(services : IServiceCollection) IserviceCollection$
-    } 
+        +ConfigBuilder(builder: HostApplicationBuilder, overrideCacheServices : Func? = null, overrideFactoryServices : Func? = null, overrideLocatorServices : Func? = null) HostApplicationBuilder$                 
+        ~AddServices(builder : IHostApplicationBuilder, overrideCacheServices : Func? = null, overrideFactoryServices : Func? = null, overrideLocatorServices : Func? = null) IServiceCollection$        
+        ~AddServices(services : IServiceCollection, overrideCacheServices : Func? = null, overrideFactoryServices : Func? = null, overrideLocatorServices : Func? = null) IServiceCollection$        
+        ~AddCacheServices(services : IServiceCollection) IserviceCollection$        
+        ~AddFactoryServices(services : IServiceCollection) IserviceCollection$        
+        ~AddLocatorServices(services : IServiceCollection) IserviceCollection$    
+        } 
 ```
 
-This static class expose the `ConfigBuilder(HostApplicationBuilder, Func<IServiceCollection, IserviceCollection>?, Func<IServiceCollection, IserviceCollection>?, Func<IServiceCollection, IserviceCollection>?)` method to configure a given `HostApplicationBuilder` builder object with factories, cache and service locator services to be registered. It either use user-specified services, via `Func<IServiceCollection, IServiceCollection>` delegates arguments, or built-in library ones, via the other internal methods (default behavior). 
+This static class expose the `ConfigBuilder(HostApplicationBuilder, Func<IServiceCollection, IserviceCollection>?, Func<IServiceCollection, IserviceCollection>?, Func<IServiceCollection, IserviceCollection>?)` method to configure a given `HostApplicationBuilder` builder object with factories, cache and service locator services to be registered. It either use user-specified services, via `Func<IServiceCollection, IServiceCollection>` delegates arguments, or built-in library ones, via the other internal methods (default behavior).
 
 ---
 
@@ -557,7 +557,15 @@ flowchart TB
     MainStart@{ shape: circle, label: "Start" } --> CreateFSM["Create FSM"]    
 
     ChangeCurrentState{"CurrentState\n== newValue ?"} -. "`**No**`" .-> CurrentStateChanged(["`**_CurrentStateChanged_**`"]):::eventClass
-    InvalidTransition["Invalid\ntransition"] -. raise .-> TransitionFailed(["`**_TransitionFailed_**`"]):::eventClass     
+    InvalidTransition["Invalid\ntransition"] -. raise .-> TransitionFailed(["`**_TransitionFailed_**`"]):::eventClass   
+    NextIsEnd{"newValue\n== EndState ?"} -. "`**Yes**`" .-> MachineEnded(["`**_MachineEnded_**`"]):::eventClass  
+
+    subgraph CurrentStateSetter["CurrentState setter"]
+    SetterStart@{ shape: circle, label: "Start" } --> ChangeCurrentState
+    CurrentStateExit["CurrentState.OnExit()"] --> UpdateCurrentState["CurrentState = new Value"]
+    UpdateCurrentState --> NextStateEnter["newValue.OnEnter()"]
+    NextStateEnter --> NextIsEnd    
+    end
 
     CreateFSM --> CreateState["Create State"]    
     CreateState-- firstState --> Init["Initialize FSM"]
@@ -577,20 +585,13 @@ flowchart TB
     InvalidTransition -- EndState --> CurrentStateSetter
     NextStateCentralized -- nextState --> CurrentStateSetter
     NextStateDecentralized -- nextState --> CurrentStateSetter   
-    end    
-
-    IsEnded{"IsEnded"} -. true .-> ResetFSM
-    NextIsEnd{"nextState\n== EndState ?"} -. "`**Yes**`" .-> MachineEnded(["`**_MachineEnded_**`"]):::eventClass
-
-    subgraph CurrentStateSetter["CurrentState setter"]
-    SetterStart@{ shape: circle, label: "Start" } --> ChangeCurrentState
-    NextIsEnd -- "`**No**`" --> CurrentStateUpdate
-    CurrentStateExit --> NextStateEnter["nextState.OnEnter()"]
-    NextStateEnter --> NextIsEnd
+    NextIsEnd --> CurrentStateUpdate    
+    
     ChangeCurrentState -- "`**Yes**`" --> CurrentStateUpdate["CurrentState.Update()"]
-    ChangeCurrentState -- "`**No**`" --> CurrentStateExit["CurrentState.OnExit()"]    
+    ChangeCurrentState -- "`**No**`" --> CurrentStateExit  
     end    
 
+    IsEnded{"IsEnded"} -- true --> ResetFSM    
     CurrentStateUpdate --> AutorunFSM
     Dispose --> End@{ shape: circle, label: "End" }
 ```
@@ -607,9 +608,13 @@ This library live in those different namspaces :
 
 - `ReusableFiniteStateMachine.Sources.StateMachine[.Interfaces]` for everything related to `IStateMachine` and `StateMachine`
 
-- `ReusableFiniteStateMachine.Sources.Factories[.Interfaces]` for the use this library factories and their implementations
+- `ReusableFiniteStateMachine.Sources.Factories[.Interfaces]` to use this library factories and their implementations
 
-- `ReusableFiniteStateMachine.Sources.Utilities` when dealing with this library `Services`, `SharedStringBuilder` and `StateChangedEventArgs`
+- `ReusableFiniteStateMachine.Sources.Utilities` when dealing with this library  `StateChangedEventArgs`
+
+- `ReusableFiniteStateMachine.Sources.Services` for configuring, building and accessing usefull services from .Net built-in Dependency Injection framework *(`Microsoft.Extensions.Hosting`)*. Built-in ones are enough to have a working FSM implementation.
+
+- `ReusableFiniteStateMachine.Sources.Cache[.Interface]` to use this library cache implementation *(internally as it is an hidden layer used by exposed `IStateFactory` factory)*.
 
 ---
 
@@ -1075,12 +1080,13 @@ internal abstract class BaseTrafficLightState : BaseState
     //Reset inner timer's count before starting the (shared) Timer.
     _tick = 0;
 
-    TimerExtensions.LightTimer.StartTimer(TimeSpan.FromSeconds(_delay));
+    TimerExtensions.StoppableTimer
+        .StartTimer(TimeSpan.FromSeconds(_delay));
   }
 
   public override void OnExit(IState? nextState)
   {
-    TimerExtensions.LightTimer.StopTimer();
+    TimerExtensions.StoppableTimer.StopTimer();
 
     Console.WriteLine($"\n--- [{DateTime.Now:mm:ss:ff}] Exiting <= {GetType().Name} ---\n");      
   }
@@ -1140,23 +1146,30 @@ internal class RedState : BaseTrafficLightState
 The static extension class used to ease the use of a `System.Threading.Timer` :
 
 ```csharp
-public static class TimerExtensions
+public static class TimerExtensions : IDisposable
 {
-  public static TimerCallback LightCallback { get; set; }
+  public static TimerCallback TimerCallback { get; set; }
 
-  private static Timer _lightTimer;
-  public static Timer LightTimer 
-    => _lightTimer ??= new(
-      LightCallback,
+  private static Timer _stoppableTimer;
+  public static Timer StoppableTimer 
+    => _stoppableTimer ??= new(
+      TimerCallback,
       default,
       Timeout.Infinite,
       Timeout.Infinite);
 
   public static void StartTimer(this Timer timer, TimeSpan period)
-    => timer?.Change(TimeSpan.Zero, period);
+    => StoppableTimer?.Change(TimeSpan.Zero, period);
 
   public static void StopTimer(this Timer timer)
-    => timer?.Change(Timeout.Infinite, Timeout.Infinite);
+    => StoppableTimer?.Change(Timeout.Infinite, Timeout.Infinite);
+
+  public void Dispose()
+  {
+    StoppableTimer.Dispose();
+    _timer = default;
+    _timerCallback = default;
+  }
 }
 ```
 
@@ -1180,7 +1193,7 @@ if (stateMachine == null)
 
 Console.WriteLine($"\n--- Created {stateMachine.GetType().Name} ---\n");
 
-TimerExtensions.LightCallback = _ =>
+TimerExtensions.TimerCallback = _ =>
 {
   if (stateMachine.CurrentState is BaseTrafficLightState lightState)
     lightState.Tick();
@@ -1212,7 +1225,11 @@ stateMachine.InitializeStateMachine(firstState, true);
 
 //Asynchronously run a task that will stop the running state machine after 50 seconds preventing a potential infinite updating loop.
 Task.Run(
-  async () => { await Task.Delay(50_000); stateMachine.ForceStopStateMachine(); }
+  async () => 
+    { 
+      await Task.Delay(50_000); 
+      stateMachine.ForceStopStateMachine(); 
+    }
   );
 
 Console.WriteLine($"\n--- Requested stopping machine : {stopUpdateLoop}\n--- Played {loopAmount} loops ---\n");
@@ -1229,15 +1246,15 @@ Be careful of any hacking, as I didn't implement any security check.
 
 #### Icon file :
 
-The `rfsm_icon.png` also named `icon.png` file, the icon of this library and its corresponding nuget package, is created by [AurÈlien Pascal Maignan](https://github.com/elTRexx) licensed under [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-nc-sa/4.0/).
+The `rfsm_icon.png` also named `icon.png` file, the icon of this library and its corresponding nuget package, is created by [Aur√©lien Pascal Maignan](https://github.com/elTRexx) licensed under [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-nc-sa/4.0/).
 
-[![CC BY-NC-SA 4.0](https://creativecommons.org/wp-content/themes/vocabulary-theme/vocabulary/svg/cc/license_badges/big/by_nc_sa.svg)](http://creativecommons.org/licenses/by-nc-sa/4.0/)
+[![](https://creativecommons.org/wp-content/themes/vocabulary-theme/vocabulary/svg/cc/license_badges/big/by_nc_sa.svg)](http://creativecommons.org/licenses/by-nc-sa/4.0/)
 
 ---
 
 ### Licenses :
 
-**ìCommons Clauseî License Condition v1.0**
+**‚ÄúCommons Clause‚Äù License Condition v1.0**
 
 The Software is provided to you by the Licensor under the License,
 as defined below, subject to the following condition.
@@ -1246,7 +1263,7 @@ Without limiting other conditions in the License, the grant of rights
 under the License will not include, and the License does not grant to you,
 the right to Sell the Software.
 
-For purposes of the foregoing, ìSellî means practicing any or all of the rights
+For purposes of the foregoing, ‚ÄúSell‚Äù means practicing any or all of the rights
 granted to you under the License to provide to third parties, for a fee or other consideration
 (including without limitation fees for hosting or consulting/ support services related to the Software),
 a product or service whose value derives, entirely or substantially, from the functionality of the Software.
@@ -1258,13 +1275,13 @@ Software: Reusable Finite State Machine
 
 Licenses: CeCILL-B and CeCILL-C
 
-Licensor: [AurÈlien Pascal Maignan](https://github.com/elTRexx)
+Licensor: [Aur√©lien Pascal Maignan](https://github.com/elTRexx)
 
 ---
 
 ### CeCILL-C
 
-Copyright or © or Copr. [AurÈlien Pascal Maignan](https://github.com/elTRexx) (25 October 2026)
+Copyright or ¬© or Copr. [Aur√©lien Pascal Maignan](https://github.com/elTRexx) (25 October 2026)
 
 [aurelien.maignan@protonmail.com](mailto:aurelien.maignan@protonmail.com)
 
@@ -1300,7 +1317,7 @@ knowledge of the CeCILL-C license and that you accept its terms.
 
 ### CeCILL-B
 
-Copyright or © or Copr. [AurÈlien Pascal Maignan](https://github.com/elTRexx) (25 October 2026)
+Copyright or ¬© or Copr. [Aur√©lien Pascal Maignan](https://github.com/elTRexx) (25 October 2026)
 
 [aurelien.maignan@protonmail.com](mailto:aurelien.maignan@protonmail.com)
 
@@ -1346,7 +1363,7 @@ Licensor grants You such rights in consideration of benefits the
 Licensor receives from making the Licensed Material available under 
 these terms and conditions.
 
-Section 1 ñ Definitions.
+Section 1 ‚Äì Definitions.
 
 ```
 Adapted Material means material subject to Copyright and Similar Rights that is derived from or based upon the Licensed Material and in which the Licensed Material is translated, altered, arranged, transformed, or otherwise modified in a manner requiring permission under the Copyright and Similar Rights held by the Licensor. For purposes of this Public License, where the Licensed Material is a musical work, performance, or sound recording, Adapted Material is always produced where the Licensed Material is synched in timed relation with a moving image.
@@ -1365,7 +1382,7 @@ Sui Generis Database Rights means rights other than copyright resulting from Dir
 You means the individual or entity exercising the Licensed Rights under this Public License. Your has a corresponding meaning.
 ```
 
-Section 2 ñ Scope.
+Section 2 ‚Äì Scope.
 
 ```
 License grant.
@@ -1376,8 +1393,8 @@ License grant.
     Term. The term of this Public License is specified in Section 6(a).
     Media and formats; technical modifications allowed. The Licensor authorizes You to exercise the Licensed Rights in all media and formats whether now known or hereafter created, and to make technical modifications necessary to do so. The Licensor waives and/or agrees not to assert any right or authority to forbid You from making technical modifications necessary to exercise the Licensed Rights, including technical modifications necessary to circumvent Effective Technological Measures. For purposes of this Public License, simply making modifications authorized by this Section 2(a)(4) never produces Adapted Material.
     Downstream recipients.
-        Offer from the Licensor ñ Licensed Material. Every recipient of the Licensed Material automatically receives an offer from the Licensor to exercise the Licensed Rights under the terms and conditions of this Public License.
-        Additional offer from the Licensor ñ Adapted Material. Every recipient of Adapted Material from You automatically receives an offer from the Licensor to exercise the Licensed Rights in the Adapted Material under the conditions of the Adapterís License You apply.
+        Offer from the Licensor ‚Äì Licensed Material. Every recipient of the Licensed Material automatically receives an offer from the Licensor to exercise the Licensed Rights under the terms and conditions of this Public License.
+        Additional offer from the Licensor ‚Äì Adapted Material. Every recipient of Adapted Material from You automatically receives an offer from the Licensor to exercise the Licensed Rights in the Adapted Material under the conditions of the Adapter‚Äôs License You apply.
         No downstream restrictions. You may not offer or impose any additional or different terms or conditions on, or apply any Effective Technological Measures to, the Licensed Material if doing so restricts exercise of the Licensed Rights by any recipient of the Licensed Material.
     No endorsement. Nothing in this Public License constitutes or may be construed as permission to assert or imply that You are, or that Your use of the Licensed Material is, connected with, or sponsored, endorsed, or granted official status by, the Licensor or others designated to receive attribution as provided in Section 3(a)(1)(A)(i).
 
@@ -1387,7 +1404,7 @@ Other rights.
     To the extent possible, the Licensor waives any right to collect royalties from You for the exercise of the Licensed Rights, whether directly or through a collecting society under any voluntary or waivable statutory or compulsory licensing scheme. In all other cases the Licensor expressly reserves any right to collect such royalties, including when the Licensed Material is used other than for NonCommercial purposes.
 ```
 
-Section 3 ñ License Conditions.
+Section 3 ‚Äì License Conditions.
 
 Your exercise of the Licensed Rights is expressly made subject to the following conditions.
 
@@ -1408,12 +1425,12 @@ Attribution.
 ShareAlike.
 
 In addition to the conditions in Section 3(a), if You Share Adapted Material You produce, the following conditions also apply.
-    The Adapterís License You apply must be a Creative Commons license with the same License Elements, this version or later, or a BY-NC-SA Compatible License.
+    The Adapter‚Äôs License You apply must be a Creative Commons license with the same License Elements, this version or later, or a BY-NC-SA Compatible License.
     You must include the text of, or the URI or hyperlink to, the Adapter's License You apply. You may satisfy this condition in any reasonable manner based on the medium, means, and context in which You Share Adapted Material.
     You may not offer or impose any additional or different terms or conditions on, or apply any Effective Technological Measures to, Adapted Material that restrict exercise of the rights granted under the Adapter's License You apply.
 ```
 
-Section 4 ñ Sui Generis Database Rights.
+Section 4 ‚Äì Sui Generis Database Rights.
 
 Where the Licensed Rights include Sui Generis Database Rights that apply to Your use of the Licensed Material:
 
@@ -1428,7 +1445,7 @@ For the avoidance of doubt, this Section 4
 License where the Licensed Rights include other Copyright and Similar 
 Rights.
 
-Section 5 ñ Disclaimer of Warranties and Limitation of Liability.
+Section 5 ‚Äì Disclaimer of Warranties and Limitation of Liability.
 
 ```
 Unless otherwise separately undertaken by the Licensor, to the extent possible, the Licensor offers the Licensed Material as-is and as-available, and makes no representations or warranties of any kind concerning the Licensed Material, whether express, implied, statutory, or other. This includes, without limitation, warranties of title, merchantability, fitness for a particular purpose, non-infringement, absence of latent or other defects, accuracy, or the presence or absence of errors, whether or not known or discoverable. Where disclaimers of warranties are not allowed in full or in part, this disclaimer may not apply to You.
@@ -1437,7 +1454,7 @@ To the extent possible, in no event will the Licensor be liable to You on any le
 The disclaimer of warranties and limitation of liability provided above shall be interpreted in a manner that, to the extent possible, most closely approximates an absolute disclaimer and waiver of all liability.
 ```
 
-Section 6 ñ Term and Termination.
+Section 6 ‚Äì Term and Termination.
 
 ```
 This Public License applies for the term of the Copyright and Similar Rights licensed here. However, if You fail to comply with this Public License, then Your rights under this Public License terminate automatically.
@@ -1450,14 +1467,14 @@ For the avoidance of doubt, the Licensor may also offer the Licensed Material un
 Sections 1, 5, 6, 7, and 8 survive termination of this Public License.
 ```
 
-Section 7 ñ Other Terms and Conditions.
+Section 7 ‚Äì Other Terms and Conditions.
 
 ```
 The Licensor shall not be bound by any additional or different terms or conditions communicated by You unless expressly agreed.
 Any arrangements, understandings, or agreements regarding the Licensed Material not stated herein are separate from and independent of the terms and conditions of this Public License.
 ```
 
-Section 8 ñ Interpretation.
+Section 8 ‚Äì Interpretation.
 
 ```
 For the avoidance of doubt, this Public License does not, and shall not be interpreted to, reduce, limit, restrict, or impose conditions on any use of the Licensed Material that could lawfully be made without permission under this Public License.

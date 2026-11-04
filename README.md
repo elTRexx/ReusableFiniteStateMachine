@@ -557,7 +557,15 @@ flowchart TB
     MainStart@{ shape: circle, label: "Start" } --> CreateFSM["Create FSM"]    
 
     ChangeCurrentState{"CurrentState\n== newValue ?"} -. "`**No**`" .-> CurrentStateChanged(["`**_CurrentStateChanged_**`"]):::eventClass
-    InvalidTransition["Invalid\ntransition"] -. raise .-> TransitionFailed(["`**_TransitionFailed_**`"]):::eventClass     
+    InvalidTransition["Invalid\ntransition"] -. raise .-> TransitionFailed(["`**_TransitionFailed_**`"]):::eventClass   
+    NextIsEnd{"newValue\n== EndState ?"} -. "`**Yes**`" .-> MachineEnded(["`**_MachineEnded_**`"]):::eventClass  
+
+    subgraph CurrentStateSetter["CurrentState setter"]
+    SetterStart@{ shape: circle, label: "Start" } --> ChangeCurrentState
+    CurrentStateExit["CurrentState.OnExit()"] --> UpdateCurrentState["CurrentState = new Value"]
+    UpdateCurrentState --> NextStateEnter["newValue.OnEnter()"]
+    NextStateEnter --> NextIsEnd    
+    end
 
     CreateFSM --> CreateState["Create State"]    
     CreateState-- firstState --> Init["Initialize FSM"]
@@ -577,20 +585,13 @@ flowchart TB
     InvalidTransition -- EndState --> CurrentStateSetter
     NextStateCentralized -- nextState --> CurrentStateSetter
     NextStateDecentralized -- nextState --> CurrentStateSetter   
-    end    
-
-    IsEnded{"IsEnded"} -. true .-> ResetFSM
-    NextIsEnd{"nextState\n== EndState ?"} -. "`**Yes**`" .-> MachineEnded(["`**_MachineEnded_**`"]):::eventClass
-
-    subgraph CurrentStateSetter["CurrentState setter"]
-    SetterStart@{ shape: circle, label: "Start" } --> ChangeCurrentState
-    NextIsEnd -- "`**No**`" --> CurrentStateUpdate
-    CurrentStateExit --> NextStateEnter["newValue.OnEnter()"]
-    NextStateEnter --> NextIsEnd
+    NextIsEnd --> CurrentStateUpdate    
+    
     ChangeCurrentState -- "`**Yes**`" --> CurrentStateUpdate["CurrentState.Update()"]
-    ChangeCurrentState -- "`**No**`" --> CurrentStateExit["CurrentState.OnExit()"]    
+    ChangeCurrentState -- "`**No**`" --> CurrentStateExit  
     end    
 
+    IsEnded{"IsEnded"} -- true --> ResetFSM    
     CurrentStateUpdate --> AutorunFSM
     Dispose --> End@{ shape: circle, label: "End" }
 ```
